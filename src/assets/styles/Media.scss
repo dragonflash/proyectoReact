@@ -1,0 +1,13 @@
+//Responsive Design
+
+@media only screen and (max-width: 600px) {
+    .main__title {
+        font-size: 30px;
+    }
+
+    .footer {
+        
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
