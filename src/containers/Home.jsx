@@ -1,11 +1,11 @@
 import React, {useState, useEffect} from "react"
-import Header from "../components/Header"
+import { connect } from "react-redux"
 import "../assets/styles/App.scss"
 import Search from "../components/Search"
 import Categories from "../components/Categories"
 import Carousel from "../components/Carousel"
 import CarouselItem from "../components/CarouselItem"
-import Footer from "../components/Footer"
+import Header from "../components/Header"
 import useInitialState from "../hooks/useInitialState"
 
 //Se crea una constante de array con dos elementos, el primero es la variable
@@ -22,9 +22,9 @@ import useInitialState from "../hooks/useInitialState"
 //ha sido cambiada o modificada, es importante ponerlo porque sino se crea un bucle
 //infinito. 
 
-const API = 'http://localhost:3000/initialState'
+//const API = 'http://localhost:3000/initialState'
 
-const App = () => {
+const Home = ( { mylist, trends, originals, searchResult }) => {
     /*const [videos, setVideos] = useState({ mylist: [], trends: [],
     originals: []})
 
@@ -34,23 +34,44 @@ const App = () => {
         .then(data => setVideos(data))
     }, [])*/
 
-    const initialState = useInitialState(API)
+    //const initialState = useInitialState(API)
 
-    return initialState.length === 0 ? <h1>Loading...</h1> : (
-        <div className="App">
+    return (
+        <>
             <Header />
             <Search />
 
             {
+                Object.keys(searchResult).length > 0 &&
+                (
+                <Categories title="Resultados">
+                    <Carousel>
+                        {
+                            searchResult.map(item => 
+                                <CarouselItem key={item.id} {...item}/>
+                            )
+                        }
+                    </Carousel>
+                </Categories>
+                )
+
+            }
+
+            {
+
                 //Agregando Validacion, si el arreglo mylist esta vacio
                 //Que no se muestre el componente.
                 //videos.mylist.length > 0 &&
-                initialState.mylist.length > 0 && 
+                mylist.length > 0 && 
                 <Categories title="Mi lista">
                     <Carousel>
                         {
-                            initialState.mylist.map(item => 
-                                <CarouselItem key={item.id} {...item} />
+                            mylist.map(item => 
+                                <CarouselItem 
+                                key={item.id} 
+                                {...item}
+                                isList
+                                />
                             )
                             
                         }
@@ -67,7 +88,7 @@ const App = () => {
                         //Se itera a traves del array trends para pasarle toda
                         //la informacion de ese array a CarouselItem.
                         //videos.trends.map(item =>
-                        initialState.trends.map(item =>
+                        trends.map(item =>
                             <CarouselItem key={item.id} {...item}/>
                         )    
                     }              
@@ -77,7 +98,7 @@ const App = () => {
             <Categories title="Originales de Platzi">
                 <Carousel>
                     {
-                        initialState.originals.map(item =>
+                        originals.map(item =>
                             <CarouselItem key={item.id} {...item} />
                         )
                         
@@ -85,10 +106,25 @@ const App = () => {
                     
                 </Carousel>
             </Categories>
-
-            <Footer />
-        </div>
+        </>
     )
 }
 
-export default App
+const mapStateToProps = state => {
+    return {
+        mylist: state.mylist,
+        trends: state.trends,
+        originals: state.originals,
+        searchResult: state.searchResult
+    }
+}
+
+//export default Home
+//connect nos permite extraer la informacion del store. Recibe dos
+//parametros los cuales son:
+//mapStateToProps y mapDispatchToProps.
+//El primer parametro es una funcion que le especifica a Provider
+//que elementos tiene que traer del estado guardado en store.
+//El segundo parametro es un objeto que incluye distintas funciones
+//que permiten ejecutar una action en redux
+export default connect(mapStateToProps, null)(Home)

@@ -5,7 +5,8 @@ module.exports={
     entry: './src/index.js',
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: 'bundle.js'
+        filename: 'bundle.js',
+        publicPath: '/'
     },
     resolve:{
         extensions: ['.js', '.jsx']
@@ -46,6 +47,10 @@ module.exports={
             }
             
         ]
+    },
+    //Para lo de las rutas, es decir Router
+    devServer: {
+        historyApiFallback: true
     },
     plugins:[
         new HtmlWebPackPlugin({

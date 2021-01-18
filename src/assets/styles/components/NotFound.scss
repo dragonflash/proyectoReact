@@ -1,0 +1,22 @@
+.error404
+{
+    background: linear-gradient(#21C08B, #8f57fd);
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+.error404__title
+{
+    color: white;
+    font-size: 70px;
+}
+
+.error404 h2
+{
+    color: white;
+    font-size: 16px;
+}
